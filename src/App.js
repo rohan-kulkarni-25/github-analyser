@@ -4,7 +4,7 @@ import LeftBar from "./Components/LeftBar";
 import MiddleBar from "./Components/MiddleBar";
 import RightBar from "./Components/RightBar";
 import "./App.css";
-
+const { FaSpinner } = require("react-icons/fa");
 export default class App extends Component {
   constructor() {
     super();
@@ -34,21 +34,31 @@ export default class App extends Component {
       },
       tips: [],
     };
-    // this.getUserData = this.getUserData.bind(this);
+    this.setState = this.setState.bind(this);
+    this.updateUser = this.updateUser.bind(this);
+    this.updateUser();
+  }
+
+  updateUser = () => {
     this.getUserData()
       .then(async () => await this.getUserRepo())
       .then(async () => await this.getOrgData())
+      .then(() => this.getTipsReady())
       .then(() => {
         setTimeout(() => {
-          console.log(`IN timeout`);
           this.setState({ loading: false });
         }, 5000);
       });
-  }
+  };
 
   getOnePage = async (page, per_page) => {
     const response = await axios.get(
-      `https://api.github.com/users/${this.state.username}/repos?page=${page}&per_page=${per_page}`
+      `https://api.github.com/users/${this.state.username}/repos?page=${page}&per_page=${per_page}`,
+      {
+        headers: {
+          authorization: process.env.TOKEN,
+        },
+      }
     );
     return response.data;
   };
@@ -81,12 +91,10 @@ export default class App extends Component {
       } else {
         own_repo = own_repo + 1;
       }
-
       // CHecking readme
       if (repo.name === this.state.userBasic.login) {
         Profilereadme = true;
       }
-
       // Filling language array
       if (repo.language !== null) {
         const foundAt = languages.findIndex(
@@ -123,7 +131,12 @@ export default class App extends Component {
   getUserData = async () => {
     this.setState({ loading: true });
     const userDataObj = await axios.get(
-      `https://api.github.com/users/${this.state.username}`
+      `https://api.github.com/users/${this.state.username}`,
+      {
+        headers: {
+          authorization: process.env.TOKEN,
+        },
+      }
     );
     const {
       name,
@@ -153,7 +166,12 @@ export default class App extends Component {
 
   getOrgData = async () => {
     let orgDataObj = await axios.get(
-      `https://api.github.com/users/${this.state.username}/orgs`
+      `https://api.github.com/users/${this.state.username}/orgs`,
+      {
+        headers: {
+          authorization: process.env.TOKEN,
+        },
+      }
     );
     orgDataObj = orgDataObj.data;
     let OrgData = [];
@@ -214,23 +232,29 @@ export default class App extends Component {
         "You can get involved in communities as that will help you to gain experience and build network.";
       tips.push(tip);
     }
-    console.log(tips);
     this.setState({ tips: [...tips] });
   };
 
   render() {
     return (
-      <>
+      <div className="font-sans-serif flex   rounded-2xl shadow-sm shadow-black">
+        <LeftBar
+          setState={this.setState}
+          updateUser={this.updateUser}
+        ></LeftBar>
         {this.state.loading ? (
-          "LOADING"
+          <FaSpinner
+            className={`text-4xl absolute left-2/3 top-1/4 animate-spin ${
+              this.state.loading ? "" : "hidden"
+            }`}
+          ></FaSpinner>
         ) : (
-          <div className="font-sans-serif flex   rounded-2xl shadow-sm shadow-black">
-            <LeftBar></LeftBar>
+          <>
             <MiddleBar state={this.state}></MiddleBar>
             <RightBar state={this.state}></RightBar>
-          </div>
+          </>
         )}
-      </>
+      </div>
     );
   }
 }

@@ -5,41 +5,49 @@ import { Doughnut } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function MiddleBar({ state }) {
-  let data = {
-    labels: [],
-    datasets: [
-      {
-        label: "# of Votes",
-        data: [],
-        backgroundColor: [],
-        borderColor: [],
-        borderWidth: 2,
-      },
-    ],
-  };
-
-  // const updateData = () => {
-  //   let labels = [];
-  //   let data = [];
-  //   let backgroundColor = [];
-  //   let borderColor = [];
-
-  //   state.languages.forEach((language) => {
-  //     labels.push(language.name);
-  //     data.push(language.value);
-  //     backgroundColor.push(language.color);
-  //   });
-  //   data.labels = labels;
-  //   data.datasets[0].data = data;
-  //   data.datasets[0].backgroundColor = backgroundColor;
-  //   return data;
+  // let data = {
+  //   labels: [],
+  //   datasets: [
+  //     {
+  //       label: "# of Votes",
+  //       data: [],
+  //       backgroundColor: [],
+  //       borderColor: [],
+  //       borderWidth: 2,
+  //     },
+  //   ],
   // };
 
-  // const data = updateData();
+  const updateData = () => {
+    let labels = [];
+    let data = [];
+    let backgroundColor = [];
+    let borderColor = [];
+
+    state.userRepo.languages.forEach((language) => {
+      labels.push(language.name);
+      data.push(language.value);
+      backgroundColor.push(language.color);
+    });
+    let dataObj = {
+      labels,
+      datasets: [
+        {
+          label: "# of Votes",
+          data,
+          backgroundColor,
+          borderWidth: 2,
+        },
+      ],
+    };
+    return dataObj;
+  };
+
+  let data = updateData();
   return (
     <section className="p-12  h-screen  overflow-scroll flex-col flex gap-8 w-2/4 ">
       <div className="border-b-2 border-black flex p-4">
-        <span className="text-2xl font-semibold">{`HELLO, ${state.userBasic.name}`}</span>
+        <span className="text-2xl font-semibold xl:text-xl">{`HELLO, ${state.userBasic.name}`}</span>
       </div>
       <div className="flex justify-around flex-col gap-8">
         <div className="h-fit bg-buttercup-300 rounded-xl p-8 ">
@@ -113,32 +121,10 @@ export default function MiddleBar({ state }) {
         <div className="h-fit bg-persianblue-300 text-white rounded-xl p-8 ">
           <span className="text-xl font-semibold block">TIPS:</span>
           <div className="mt-8">
-            <ul className="list-disc flex flex-col gap-8 tracking-wider text-lg">
-              <li>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore
-                quam nulla incidunt at delectus quos sequi officiis deserunt
-                velit repellendus!
-              </li>
-              <li>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore
-                quam nulla incidunt at delectus quos sequi officiis deserunt
-                velit repellendus!
-              </li>
-              <li>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore
-                quam nulla incidunt at delectus quos sequi officiis deserunt
-                velit repellendus!
-              </li>
-              <li>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore
-                quam nulla incidunt at delectus quos sequi officiis deserunt
-                velit repellendus!
-              </li>
-              <li>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore
-                quam nulla incidunt at delectus quos sequi officiis deserunt
-                velit repellendus!
-              </li>
+            <ul className="list-disc flex flex-col gap-8 tracking-wider text-lg xl:text-base">
+              {state.tips.map((tip) => (
+                <li>{tip}</li>
+              ))}
             </ul>
           </div>
         </div>

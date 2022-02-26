@@ -126,6 +126,12 @@ module.exports = {
         288: "72rem",
         "95vh": "95vh",
       },
+      keyframes: {
+        spin: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+      },
     },
   },
   plugins: [],
