@@ -1,9 +1,9 @@
 import React from "react";
 import logo from "./../assets/logo.svg";
 import Card from "./Card";
-const { AiOutlineSearch } = require("react-icons/ai");
+const { AiFillCloseSquare } = require("react-icons/ai");
 
-export default function LeftBar({ updateUser, setState }) {
+export default function LeftBar({ updateUser, setState, openLeftBar }) {
   const updateState = (e) => {
     e.preventDefault();
     const name = document.getElementById("uname").value;
@@ -11,7 +11,14 @@ export default function LeftBar({ updateUser, setState }) {
   };
 
   return (
-    <section className="border-r-2 border-black-100 min-h-screen flex-col flex gap-24 w-1/4 p-4 overflow-y-auto">
+    <section
+      id="lf"
+      className="border-r-2 border-black-100 min-h-screen flex-col flex gap-24  p-4 overflow-y-auto lg:bg-white lg:p-8 lg:w-2/4 w-1/4 lg:absolute lg:hidden"
+    >
+      <AiFillCloseSquare
+        className="absolute right-4 top-4 text-3xl lg:block hidden"
+        onClick={openLeftBar}
+      ></AiFillCloseSquare>
       <div className="border-b-2 border-black flex  items-center">
         <img src={logo} alt="" srcset="" className="h-8" />
         <span className="text-xl xl:text-base">GITHUB PROFILE ANALYZER</span>

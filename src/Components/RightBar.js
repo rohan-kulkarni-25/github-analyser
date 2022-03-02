@@ -3,7 +3,7 @@ import React from "react";
 const { VscFeedback } = require("react-icons/vsc");
 export default function RightBar({ state }) {
   return (
-    <section className=" bg-white flex-col flex gap-8 w-1/4 border-l-2 border-black-100 p-4">
+    <section className=" bg-white flex-col flex gap-8  border-l-2 border-black-100 p-4 md:w-full md:hidden w-1/4">
       <div className="border-b-2 border-black flex justify-evenly items-center p-2 ">
         <a href="mailto:rohank2502@gmail.com">
           <VscFeedback className="text-2xl cursor-pointer"></VscFeedback>

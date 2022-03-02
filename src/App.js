@@ -4,7 +4,10 @@ import LeftBar from "./Components/LeftBar";
 import MiddleBar from "./Components/MiddleBar";
 import RightBar from "./Components/RightBar";
 import "./App.css";
+import MobileView from "./Components/MobileView";
+const { BsArrowRightSquareFill } = require("react-icons/bs");
 const { FaSpinner } = require("react-icons/fa");
+
 export default class App extends Component {
   constructor() {
     super();
@@ -37,6 +40,7 @@ export default class App extends Component {
     this.setState = this.setState.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.updateUser();
+    this.openLeftBar = this.openLeftBar.bind(this);
   }
 
   updateUser = () => {
@@ -235,26 +239,58 @@ export default class App extends Component {
     this.setState({ tips: [...tips] });
   };
 
+  openLeftBar = () => {
+    const bar = document.getElementById("lf");
+    bar.classList.toggle("lg:hidden");
+  };
+
   render() {
-    return (
-      <div className="font-sans-serif flex   rounded-2xl shadow-sm shadow-black">
-        <LeftBar
-          setState={this.setState}
-          updateUser={this.updateUser}
-        ></LeftBar>
-        {this.state.loading ? (
-          <FaSpinner
-            className={`text-4xl absolute left-2/3 top-1/4 animate-spin ${
-              this.state.loading ? "" : "hidden"
-            }`}
-          ></FaSpinner>
-        ) : (
-          <>
-            <MiddleBar state={this.state}></MiddleBar>
-            <RightBar state={this.state}></RightBar>
-          </>
-        )}
-      </div>
-    );
+    if (window.innerWidth > 750) {
+      return (
+        <div className="font-sans-serif flex md:justify-end rounded-2xl shadow-sm shadow-black">
+          <BsArrowRightSquareFill
+            className="absolute text-3xl top-4 left-4 hidden lg:block"
+            onClick={() => this.openLeftBar()}
+          ></BsArrowRightSquareFill>
+          <LeftBar
+            setState={this.setState}
+            updateUser={this.updateUser}
+            openLeftBar={this.openLeftBar}
+          ></LeftBar>
+          {this.state.loading ? (
+            <FaSpinner
+              className={`text-4xl absolute left-2/3 top-2/4 animate-spin  ${
+                this.state.loading ? "" : "hidden"
+              }`}
+            ></FaSpinner>
+          ) : (
+            <>
+              <MiddleBar state={this.state}></MiddleBar>
+              <RightBar state={this.state}></RightBar>
+            </>
+          )}
+        </div>
+      );
+    } else {
+      return (
+        <div className="font-sans-serif flex md:justify-end rounded-2xl shadow-sm shadow-black">
+          {this.state.loading ? (
+            <FaSpinner
+              className={`text-4xl absolute left-2/4 top-1/4 animate-spin ${
+                this.state.loading ? "" : "hidden"
+              }`}
+            ></FaSpinner>
+          ) : (
+            <>
+              <MobileView
+                setState={this.setState}
+                updateUser={this.updateUser}
+                state={this.state}
+              ></MobileView>
+            </>
+          )}
+        </div>
+      );
+    }
   }
 }
